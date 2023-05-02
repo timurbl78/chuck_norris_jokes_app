@@ -1,16 +1,17 @@
 # flutter_app
 
-A new Flutter project.
+A new Flutter project. Chuck Norris jokes.
 
-## Getting Started
+* Api: https://api.chucknorris.io/
+* State manager: Redux
+* Build: android
 
-This project is a starting point for a Flutter application.
+# Screenshots
 
-A few resources to get you started if this is your first Flutter project:
+![Home page](./assets/home.png)
+![Jokes page](./assets/jokes.png)
+![Favorites page](./assets/favorites.png)
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+# APK
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+[link](./app-release.apk)
