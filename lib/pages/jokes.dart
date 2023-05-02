@@ -15,38 +15,45 @@ class Jokes extends StatefulWidget {
 
 class JokesState extends State<Jokes> {
   var _isJokeLoaded = false;
+  var _isCategoriesLoaded = false;
   Joke? _joke;
   List<String>? _categories = [];
   String? _category = '';
 
   @override
   void initState() {
+    super.initState();
+
     getRandomJoke();
     getCategories();
-
-    super.initState();
   }
 
   getRandomJoke() async {
     _isJokeLoaded = false;
+    Joke? joke;
 
     if (_category != '' && _category != null) {
-      _joke = await ChuckNorrisService()
-          .getRandomJoke(category: _category as String);
+      joke = await ChuckNorrisService().getRandomJoke(category: _category);
     } else {
-      _joke = await ChuckNorrisService().getRandomJoke();
+      joke = await ChuckNorrisService().getRandomJoke();
     }
 
-    if (_joke != null) {
+    if (joke != null) {
       setState(() {
+        _joke = joke;
         _isJokeLoaded = true;
       });
     }
   }
 
   getCategories() async {
-    setState(() async {
-      _categories = await ChuckNorrisService().getCategories();
+    _isCategoriesLoaded = false;
+
+    var cat = await ChuckNorrisService().getCategories();
+
+    setState(() {
+      _categories = cat;
+      _isCategoriesLoaded = true;
     });
   }
 
@@ -67,7 +74,10 @@ class JokesState extends State<Jokes> {
     return Scaffold(
       appBar: const MyAppBar(title: 'Jokes'),
       body: Visibility(
-        visible: _isJokeLoaded,
+        replacement: const Center(
+          child: CircularProgressIndicator(),
+        ),
+        visible: _isJokeLoaded && _isCategoriesLoaded,
         child: Padding(
           padding: const EdgeInsets.all(20),
           child: Column(

@@ -10,23 +10,33 @@ class Favorites extends StatelessWidget {
     return Scaffold(
       appBar: const MyAppBar(title: 'Favorites'),
       body: StoreConnector<List<String>, List<String>>(
-        converter: (store) => store.state,
-        builder: (context, state) => ListView.builder(
-          padding: const EdgeInsets.all(20),
-          itemCount: state.length,
-          itemBuilder: (_, index) {
-            return Padding(
-              padding: const EdgeInsets.all(5),
-              child: Text(
-                '${index + 1}) ${state[index]}',
-                style: const TextStyle(
-                  fontSize: 20,
+          converter: (store) => store.state,
+          builder: (context, state) => Visibility(
+                replacement: const Center(
+                  child: Text(
+                    "No favorites jokes added yet",
+                    style: TextStyle(
+                      fontSize: 24,
+                    ),
+                  ),
                 ),
-              ),
-            );
-          },
-        ),
-      ),
+                visible: state.isNotEmpty,
+                child: ListView.builder(
+                  padding: const EdgeInsets.all(20),
+                  itemCount: state.length,
+                  itemBuilder: (_, index) {
+                    return Padding(
+                      padding: const EdgeInsets.all(5),
+                      child: Text(
+                        '${index + 1}) ${state[index]}',
+                        style: const TextStyle(
+                          fontSize: 20,
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              )),
     );
   }
 }

@@ -1,60 +1,45 @@
+import 'dart:convert';
+
+import 'package:http/http.dart' as http;
 import 'package:dio/dio.dart';
 import 'package:flutter_app/models/categories.dart';
 import 'package:flutter_app/models/joke.dart';
 import 'package:flutter_app/models/search_jokes.dart';
 
 class ChuckNorrisService {
-  static const _BASE_URL = 'https://api.chucknorris.io/jokes';
-
-  final Dio _dio = Dio(
-    BaseOptions(baseUrl: _BASE_URL),
-  );
+  static const urlPrefix = 'https://api.chucknorris.io/jokes';
 
   Future<Joke?> getRandomJoke({
-    String category = '',
+    String? category,
   }) async {
-    Map<String, String> query = {};
+    var client = http.Client();
+    Uri uri;
 
-    if (category != '') {
-      query = {'category': category};
+    if (category != '' && category != null) {
+      uri = Uri.parse('$urlPrefix/random?category=$category');
+    } else {
+      uri = Uri.parse('$urlPrefix/random');
     }
 
-    final response = await _dio.get(
-      '/random',
-      queryParameters: query,
-    );
+    var response = await client.get(uri);
 
     if (response.statusCode != 200) {
       return null;
     }
 
-    return Joke.fromJson(response.data);
-  }
-
-  Future<SearchJokes?> searchJokes({
-    required String query,
-  }) async {
-    final response = await _dio.get(
-      '/random',
-      queryParameters: {'query': query},
-    );
-
-    if (response.statusCode != 200) {
-      return null;
-    }
-
-    return SearchJokes.fromJson(response.data);
+    return Joke.fromJson(json.decode(response.body));
   }
 
   Future<List<String>?> getCategories() async {
-    final response = await _dio.get(
-      '/categories',
-    );
+    var client = http.Client();
+    var uri = Uri.parse('$urlPrefix/categories');
+
+    var response = await client.get(uri);
 
     if (response.statusCode != 200) {
       return null;
     }
 
-    return categoriesFromJson(response.data);
+    return categoriesFromJson(json.decode(response.body));
   }
 }
